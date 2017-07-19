@@ -5,6 +5,7 @@ import java.util.*;
  */
 
 class Node implements Comparable<Node> {
+
     private final String vertexName;
     private final double x;
     private final double y;
@@ -12,6 +13,14 @@ class Node implements Comparable<Node> {
     private double distanceFromOrigin;
     private boolean done;
 
+    /**
+     * A node can be thought of as any vertex in the Graph
+     *
+     * @param vertexName the name given to the vertex
+     * @param x the x coordinate of the vertex in the 3D space
+     * @param y the y coordinate of the vertex in the 3D space
+     * @param z the z coordinate of the vertex in the 3D space
+     */
 
     Node(String vertexName, double x, double y, double z) {
         this.vertexName = vertexName;
@@ -32,6 +41,11 @@ class Node implements Comparable<Node> {
         return this.vertexName + ":" + this.distanceFromOrigin;
     }
 
+    /**
+     * Tests if the distance from a prev node to this one is less than 3, and if so, adds the distance from the origin
+     * @param prev the previous node
+     * @return null if distance is more than 3, otherwise this distance + previous node's distance
+     */
     Double distance(Node prev) {
         double distance = Math.sqrt(Math.pow((prev.x - this.x), 2) + Math.pow((prev.y - this.y), 2) +
                 Math.pow((prev.z - this.z), 2));
@@ -60,6 +74,10 @@ class Node implements Comparable<Node> {
 class Graph {
     private HashMap<Node, ArrayList<Node>> adjacencies;
 
+    /**
+     * A Graph of nodes that are given as an arraylist
+     * @param nodes an arraylist of all nodes in the Graph
+     */
     Graph(ArrayList<Node> nodes) {
         if(nodes.isEmpty()) {
             throw(new IllegalArgumentException("Empty Node List"));

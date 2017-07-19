@@ -14,7 +14,7 @@ class Node implements Comparable<Node> {
     private boolean done;
 
     /**
-     * A node can be thought of as any vertex in the Graph
+     * A node can be thought of as any vertex in the Graph. They are all preset as Infinity+ distance and unfinished.
      *
      * @param vertexName the name given to the vertex
      * @param x the x coordinate of the vertex in the 3D space
@@ -76,18 +76,20 @@ class Graph {
 
     /**
      * A Graph of nodes that are given as an arraylist
-     * @param nodes an arraylist of all nodes in the Graph
+     * @param nodes an arraylist of all nodes in the Graph (nodes.get(0) will be the origin)
+     *
+     *
      */
     Graph(ArrayList<Node> nodes) {
         if(nodes.isEmpty()) {
             throw(new IllegalArgumentException("Empty Node List"));
         }
-        nodes.get(0).setDistance(0.0);
+        nodes.get(0).setDistance(0.0); //The origin node has 0 distance from the origin
         this.adjacencies = new HashMap<>();
-        for(Node v : nodes) {
+        for(Node v : nodes) { //Makes an adjacency list of all nodes that are reachable from every other node
             this.adjacencies.put(v, new ArrayList<>());
             for(Node n : nodes) {
-                if(n.distance(v) != null && v != n) {
+                if(n.distance(v) != null && v != n) { //Tests if the distance is more than 3, and if so, moves on
                     this.adjacencies.get(v).add(n);
                 }
             }
@@ -95,6 +97,13 @@ class Graph {
 
     }
 
+    /**
+     * Takes the origin node and uses Dijkstra's algorithm to find the shortest paths from the origin to each node.
+     *
+     * Uses the adjacency list to calculate which nodes can discovered from every other node.
+     *
+     * @param s The origin node
+     */
     void dijkstra(Node s) {
         PriorityQueue<Node> queue = new PriorityQueue<>();
         queue.add(s);
@@ -106,7 +115,7 @@ class Graph {
             }
             for(Node n : this.adjacencies.get(v)) {
                 Double d = n.distance(v);
-                if (!queue.contains(n) && !n.isDone()) {
+                if (!queue.contains(n) && !n.isDone()) { //Prevents cycling through nodes that are finished
                     n.setDistance(d);
                     queue.offer(n);
                 }

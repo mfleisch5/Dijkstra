@@ -76,9 +76,9 @@ class Graph {
 
     /**
      * A Graph of nodes that are given as an arraylist
+     *
+     *
      * @param nodes an arraylist of all nodes in the Graph (nodes.get(0) will be the origin)
-     *
-     *
      */
     Graph(ArrayList<Node> nodes) {
         if(nodes.isEmpty()) {

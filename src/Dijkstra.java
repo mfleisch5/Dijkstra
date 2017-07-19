@@ -56,6 +56,10 @@ class Node implements Comparable<Node> {
         return this.distanceFromOrigin;
     }
 
+    String getVertexName() {
+        return vertexName;
+    }
+
 
     void setDistance(Double d) {
         this.distanceFromOrigin = d;
@@ -73,6 +77,7 @@ class Node implements Comparable<Node> {
 
 class Graph {
     private HashMap<Node, ArrayList<Node>> adjacencies;
+    private Node startingPoint;
 
     /**
      * A Graph of nodes that are given as an arraylist
@@ -84,15 +89,23 @@ class Graph {
         if(nodes.isEmpty()) {
             throw(new IllegalArgumentException("Empty Node List"));
         }
-        nodes.get(0).setDistance(0.0); //The origin node has 0 distance from the origin
+        //The origin node has 0 distance from the origin
         this.adjacencies = new HashMap<>();
+        this.startingPoint = null;
         for(Node v : nodes) { //Makes an adjacency list of all nodes that are reachable from every other node
+            if(v.getVertexName().equals("S")) {
+                this.startingPoint = v;
+                v.setDistance(0.0);
+            }
             this.adjacencies.put(v, new ArrayList<>());
             for(Node n : nodes) {
                 if(n.distance(v) != null && v != n) { //Tests if the distance is more than 3, and if so, moves on
                     this.adjacencies.get(v).add(n);
                 }
             }
+        }
+        if(this.startingPoint == null) {
+            throw(new IllegalArgumentException("No starting node"));
         }
 
     }
@@ -104,9 +117,9 @@ class Graph {
      *
      * @param s The origin node
      */
-    void dijkstra(Node s) {
+    void dijkstra() {
         PriorityQueue<Node> queue = new PriorityQueue<>();
-        queue.add(s);
+        queue.add(this.startingPoint);
         while(!queue.isEmpty()) {
             Node v = queue.poll();
             v.done();
@@ -140,7 +153,7 @@ class Dijkstra {
             nodes.add(new Node(s, x, y, z));
         }
         Graph G = new Graph(nodes);
-        G.dijkstra(nodes.get(0));
+        G.dijkstra();
     }
 
 }
